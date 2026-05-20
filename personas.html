@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Personas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a18;
+    --ink-muted: #5a5a55;
+    --ink-faint: #9a9a94;
+    --surface: #f5f3ee;
+    --card-bg: #faf9f6;
+    --accent: #c0392b;
+    --accent-warm: #e8ddd0;
+    --border: rgba(26,26,24,0.12);
+    --overlay: rgba(18,16,12,0.72);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--surface);
+    color: var(--ink);
+    padding: 3rem 2rem;
+    min-height: 100vh;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .intro-rule {
+    width: 48px;
+    height: 2px;
+    background: var(--accent);
+    margin: 1.25rem 0 0.75rem;
+  }
+
+  .intro-text {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--ink-muted);
+    max-width: 540px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(26,26,24,0.1);
+  }
+
+  .card:hover .card-hint {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .card-img-wrap {
+    width: 100%;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    background: var(--accent-warm);
+    position: relative;
+  }
+
+  .card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .card:hover .card-img-wrap img {
+    transform: scale(1.04);
+  }
+
+  .card-number {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    background: rgba(26,26,24,0.35);
+    padding: 2px 8px;
+    backdrop-filter: blur(4px);
+  }
+
+  .card-body {
+    padding: 1rem 1.1rem 1.25rem;
+    border-top: 2px solid var(--accent);
+  }
+
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 3px;
+  }
+
+  .card-role {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .card-hint {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 8px;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--overlay);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  .modal-overlay.open {
+    display: flex;
+  }
+
+  .modal {
+    background: var(--card-bg);
+    max-width: 780px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    position: relative;
+    animation: modalIn 0.25s ease;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal-img {
+    width: 100%;
+    height: 100%;
+    min-height: 340px;
+    object-fit: cover;
+    display: block;
+    background: var(--accent-warm);
+  }
+
+  .modal-content {
+    padding: 2rem 2rem 2rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    border-left: 3px solid var(--accent);
+  }
+
+  .modal-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .modal-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+
+  .modal-role {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: -0.75rem;
+  }
+
+  .modal-quote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    line-height: 1.55;
+    border-left: 2px solid var(--accent);
+    padding-left: 1rem;
+  }
+
+  .modal-bio {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--ink-muted);
+    line-height: 1.75;
+  }
+
+  .modal-section-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.4rem;
+  }
+
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 1rem;
+  }
+
+  .demo-item {
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  .demo-item span {
+    color: var(--ink-faint);
+    font-size: 11px;
+    display: block;
+    font-weight: 300;
+  }
+
+  .needs-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .needs-list li {
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-weight: 300;
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    line-height: 1.5;
+  }
+
+  .needs-list li::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    min-width: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 6px;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 22px;
+    color: var(--ink-muted);
+    line-height: 1;
+    padding: 4px;
+    z-index: 10;
+    transition: color 0.15s;
+  }
+
+  .modal-close:hover { color: var(--ink); }
+
+  @media (max-width: 560px) {
+    .modal { grid-template-columns: 1fr; }
+    .modal-img { min-height: 220px; max-height: 260px; }
+    .modal-content { border-left: none; border-top: 3px solid var(--accent); }
+    .grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<p class="section-label">Who we're designing for</p>
+<h1>Meet the<br><em style="font-style:italic; font-weight:400;">personas</em></h1>
+<div class="intro-rule"></div>
+<p class="intro-text">Six real archetypes drawn from our research. Click any portrait to learn more about their lives, needs, and motivations.</p>
+
+<div class="grid" id="grid"></div>
+
+<div class="modal-overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modal-name-el">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="close-btn" aria-label="Close">&times;</button>
+    <img id="modal-img" class="modal-img" src="" alt="">
+    <div class="modal-content">
+      <div>
+        <p class="modal-eyebrow" id="modal-eyebrow">Persona</p>
+        <h2 class="modal-name" id="modal-name-el"></h2>
+        <p class="modal-role" id="modal-role"></p>
+      </div>
+      <blockquote class="modal-quote" id="modal-quote"></blockquote>
+      <div>
+        <p class="modal-section-label">Background</p>
+        <p class="modal-bio" id="modal-bio"></p>
+      </div>
+      <div>
+        <p class="modal-section-label">Demographics</p>
+        <div class="demo-grid" id="modal-demo"></div>
+      </div>
+      <div>
+        <p class="modal-section-label">Key needs</p>
+        <ul class="needs-list" id="modal-needs"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const personas = [
+  {
+    number: "01",
+    name: "Jordan Reyes",
+    role: "First-Time Renter",
+    image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80",
+    quote: "I just want to know what I'm actually signing up for — the fine print feels like a trap.",
+    bio: "Jordan is navigating renting for the first time after moving out of a family home. They rely heavily on word-of-mouth and social media to understand what's fair, and often feel overwhelmed by lease language they don't fully understand.",
+    demographics: [
+      { label: "Age", value: "22–28" },
+      { label: "Income", value: "$28k–$42k/yr" },
+      { label: "Location", value: "Urban / near transit" },
+      { label: "Education", value: "Some college" }
+    ],
+    needs: [
+      "Plain-language explanations of lease terms",
+      "Know their rights as a tenant before signing",
+      "Understand what 'application fees' actually cover",
+      "Find trustworthy resources without going to a lawyer"
+    ]
+  },
+  {
+    number: "02",
+    name: "Diane Okafor",
+    role: "Long-Term Resident",
+    image: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=600&q=80",
+    quote: "I've lived here 14 years. Nobody should be able to just push me out.",
+    bio: "Diane has deep roots in her neighborhood and has watched it change around her. She's seen neighbors displaced and worries about her own stability. She's motivated, civically engaged, and wants to understand her options before it's too late.",
+    demographics: [
+      { label: "Age", value: "50–65" },
+      { label: "Income", value: "$35k–$55k/yr" },
+      { label: "Tenure", value: "10+ years" },
+      { label: "Household", value: "Multi-generational" }
+    ],
+    needs: [
+      "Understand protections available to long-term renters",
+      "Know who to contact when landlords are unresponsive",
+      "Access to community organizing resources",
+      "Assurance that her history here matters legally"
+    ]
+  },
+  {
+    number: "03",
+    name: "Marcus Webb",
+    role: "Housing Navigator",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+    quote: "The resources exist. The problem is nobody can find them — including me.",
+    bio: "Marcus works at a community nonprofit helping clients navigate housing instability. He spends hours each week tracking down up-to-date information across city departments, nonprofits, and legal aid organizations — often with outdated or conflicting results.",
+    demographics: [
+      { label: "Age", value: "30–45" },
+      { label: "Role", value: "Case manager / advocate" },
+      { label: "Tools", value: "Spreadsheets, email, phone" },
+      { label: "Caseload", value: "15–30 clients/month" }
+    ],
+    needs: [
+      "Centralized, current resource directory",
+      "Clear eligibility criteria for each program",
+      "Ability to share info easily with clients",
+      "Reduce time spent verifying outdated listings"
+    ]
+  },
+  {
+    number: "04",
+    name: "Priya Nair",
+    role: "Working Parent",
+    image: "https://images.unsplash.com/photo-1573497019236-17f8177b81e8?w=600&q=80",
+    quote: "I don't have time to go to an office. Everything has to work from my phone.",
+    bio: "Priya works two jobs and is raising two kids as a single parent. She has run into housing instability before and is currently managing a dispute with her landlord about repairs. She's resourceful but time-poor, and needs help that meets her where she is.",
+    demographics: [
+      { label: "Age", value: "32–42" },
+      { label: "Income", value: "$40k–$60k/yr" },
+      { label: "Household", value: "Single parent, 2 children" },
+      { label: "Device", value: "Primarily mobile" }
+    ],
+    needs: [
+      "Mobile-first resources she can access during breaks",
+      "Fast answers to specific, urgent questions",
+      "Help documenting repair requests and landlord contact",
+      "Childcare-friendly appointment or virtual options"
+    ]
+  },
+  {
+    number: "05",
+    name: "Calvin Soto",
+    role: "Returning Resident",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80",
+    quote: "Everyone tells me to 'just apply' — but nobody tells me what happens when they run my background.",
+    bio: "Calvin is rebuilding his life after incarceration and facing housing barriers that most applicants don't encounter. He's motivated and employed, but gets denied before he can even make his case. He needs fair-chance housing options and practical guidance.",
+    demographics: [
+      { label: "Age", value: "28–45" },
+      { label: "Status", value: "Recently reintegrated" },
+      { label: "Employment", value: "Part-time / new hire" },
+      { label: "Support", value: "Reentry program client" }
+    ],
+    needs: [
+      "Fair-chance housing listings and landlords",
+      "Know his rights around background check policies",
+      "Help writing a personal statement for applications",
+      "Connections to legal aid and reentry housing specialists"
+    ]
+  },
+  {
+    number: "06",
+    name: "Evelyn Park",
+    role: "Senior Homeowner",
+    image: "https://images.unsplash.com/photo-1566616213894-2d4e1baee5d8?w=600&q=80",
+    quote: "This house is my retirement. I just need to know I won't lose it to something I don't understand.",
+    bio: "Evelyn owns her home but lives on a fixed income and is worried about tax bills, predatory refinancing schemes, and what happens to her home if she needs care. She's tech-cautious but capable, and wants to talk to a real person who won't judge her questions.",
+    demographics: [
+      { label: "Age", value: "68–80" },
+      { label: "Income", value: "Fixed / retirement" },
+      { label: "Tenure", value: "Homeowner 20+ years" },
+      { label: "Tech comfort", value: "Low–moderate" }
+    ],
+    needs: [
+      "Understand property tax relief programs she may qualify for",
+      "Spot and avoid predatory lending or deed fraud",
+      "In-person or phone-first support options",
+      "Plain-language estate and homeownership planning help"
+    ]
+  }
+];
+
+const grid = document.getElementById('grid');
+const overlay = document.getElementById('overlay');
+
+personas.forEach((p, i) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.setAttribute('tabindex', '0');
+  card.setAttribute('role', 'button');
+  card.setAttribute('aria-label', `Learn more about ${p.name}`);
+  card.innerHTML = `
+    <div class="card-img-wrap">
+      <img src="${p.image}" alt="${p.name}" loading="lazy">
+      <div class="card-number">${p.number}</div>
+    </div>
+    <div class="card-body">
+      <div class="card-name">${p.name}</div>
+      <div class="card-role">${p.role}</div>
+    </div>
+    <div class="card-hint">View profile</div>
+  `;
+  card.addEventListener('click', () => openModal(p));
+  card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openModal(p); });
+  grid.appendChild(card);
+});
+
+function openModal(p) {
+  document.getElementById('modal-img').src = p.image;
+  document.getElementById('modal-img').alt = p.name;
+  document.getElementById('modal-eyebrow').textContent = `Persona ${p.number}`;
+  document.getElementById('modal-name-el').textContent = p.name;
+  document.getElementById('modal-role').textContent = p.role;
+  document.getElementById('modal-quote').textContent = `"${p.quote}"`;
+  document.getElementById('modal-bio').textContent = p.bio;
+
+  const demoGrid = document.getElementById('modal-demo');
+  demoGrid.innerHTML = p.demographics.map(d =>
+    `<div class="demo-item"><span>${d.label}</span>${d.value}</div>`
+  ).join('');
+
+  const needsList = document.getElementById('modal-needs');
+  needsList.innerHTML = p.needs.map(n => `<li>${n}</li>`).join('');
+
+  overlay.classList.add('open');
+  document.getElementById('close-btn').focus();
+  document.body.style.overflow = 'hidden';
+}
+
+document.getElementById('close-btn').addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function closeModal() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+</script>
+</body>
+</html>
