@@ -335,10 +335,10 @@
 </head>
 <body>
 
-<p class="section-label">Who we're designing for</p>
-<h1>Meet the<br><em style="font-style:italic; font-weight:400;">personas</em></h1>
+<p class="section-label">Baltimore's waste system is powered by people. From the resident rolling their bin to the curb, to the officials shaping policy, every role matters.</p>
 <div class="intro-rule"></div>
-<p class="intro-text">Six real archetypes drawn from our research. Click any portrait to learn more about their struggles and needs within Baltimore's waste cycle.</p>
+<p class="intro-text">Recycling contamination is a shared challenge through every step of the process. There are possible methods of intervention, but they require an understanding of each key player in the recycling system.</p>
+<h1>Take a look into each level of perspective, which may include a struggle, desire, or idea.</em></h1>
 
 <div class="grid" id="grid"></div>
 
@@ -347,10 +347,6 @@
     <button class="modal-close" id="close-btn" aria-label="Close">&times;</button>
     <img id="modal-img" class="modal-img" src="" alt="">
     <div class="modal-content">
-      <div>
-        <p class="modal-eyebrow" id="modal-eyebrow">Persona</p>
-        <h2 class="modal-name" id="modal-name-el"></h2>
-        <p class="modal-role" id="modal-role"></p>
       </div>
       <blockquote class="modal-quote" id="modal-quote"></blockquote>
       <div>
@@ -358,11 +354,11 @@
         <p class="modal-bio" id="modal-bio"></p>
       </div>
       <div>
-        <p class="modal-section-label">Demographics</p>
+        <p class="modal-section-label">Pain points and frustrations</p>
         <div class="demo-grid" id="modal-demo"></div>
       </div>
       <div>
-        <p class="modal-section-label">Key needs</p>
+        <p class="modal-section-label">Needs and expectations</p>
         <ul class="needs-list" id="modal-needs"></ul>
       </div>
     </div>
@@ -372,49 +368,49 @@
 <script>
 const personas = [
   {
-    number: "01",
-    name: "Jordan Reyes",
-    role: "First-Time Renter",
-    image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80",
-    quote: "I just want to know what I'm actually signing up for — the fine print feels like a trap.",
-    bio: "Jordan is navigating renting for the first time after moving out of a family home. They rely heavily on word-of-mouth and social media to understand what's fair, and often feel overwhelmed by lease language they don't fully understand.",
+    name: "Rashaad Tillery",
+    role: "Baltimore Resident",
+    image: "https://canva.link/y0grjw725z6drdx",
+    quote: "I don't fully believe that my recycling actually gets recycled. I care about my neighborhood and my city's health, but it feels like no matter what I do, I can't make a difference.",
+    bio: "Baltimore residents are the first link in the chain. They make daily decisions in their households about what gets recycled, composted, or thrown away, often without enough information or support to get it right.",
     demographics: [
-      { label: "Age", value: "22–28" },
-      { label: "Income", value: "$28k–$42k/yr" },
-      { label: "Location", value: "Urban / near transit" },
-      { label: "Education", value: "Some college" }
+     //pain points
+       "Wants to know how the system works",
+       "Hierarchy of needs must be met first - like neighborhood safety",
+       "Plain-language explanations of lease terms"
+       "Plain-language explanations of lease terms",
     ],
     needs: [
-      "Plain-language explanations of lease terms",
-      "Know their rights as a tenant before signing",
-      "Understand what 'application fees' actually cover",
-      "Find trustworthy resources without going to a lawyer"
+     //needs and expectations
+      "Plain-language explanations of waste management system",
+      "",
+      "",
+      ""
     ]
   },
   {
-    number: "02",
-    name: "Diane Okafor",
-    role: "Long-Term Resident",
-    image: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=600&q=80",
+    name: "Tyson",
+    role: "Recycling Crew",
+    image: "https://canva.link/i56scc701oju2dy",
     quote: "I've lived here 14 years. Nobody should be able to just push me out.",
-    bio: "Diane has deep roots in her neighborhood and has watched it change around her. She's seen neighbors displaced and worries about her own stability. She's motivated, civically engaged, and wants to understand her options before it's too late.",
+    bio: "As a recycling crew member, Tyson wakes up at 4am in order to get to work at 5am. He clocks in, and starts his route around 5:30am on a team of 3-4 workers. He checks each recycling bin on his route to ensure there are no contaminated items (i.e. anything with food or non-recyclable materials). He loads acceptable bins onto the dumping mechanism, and puts OOPS! tags on contaminated bins. He and his team move quickly and efficiently in order to get through their route on time.",
     demographics: [
-      { label: "Age", value: "50–65" },
-      { label: "Income", value: "$35k–$55k/yr" },
-      { label: "Tenure", value: "10+ years" },
-      { label: "Household", value: "Multi-generational" }
+     //pain points and frustrations
+      "Where there are contaminated items hidden underneath other recyclable ones, it slows down the process and potentially ruins the entire recycling load",
+      "Residents are stil learning about the recycling rules, and that education isn't consistent across neighborhoods",
+      "He sees contamination from the same households and same blocks every week",
+      "The tracking software doesn't always work, but it also slows down the route due to slow process to track"
     ],
     needs: [
-      "Understand protections available to long-term renters",
+      "More education for residents so there's less contamination",
       "Know who to contact when landlords are unresponsive",
       "Access to community organizing resources",
       "Assurance that her history here matters legally"
     ]
   },
   {
-    number: "03",
-    name: "Marcus Webb",
-    role: "Housing Navigator",
+    name: "Antwan Byrd",
+    role: "Operations Manager",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
     quote: "The resources exist. The problem is nobody can find them — including me.",
     bio: "Marcus works at a community nonprofit helping clients navigate housing instability. He spends hours each week tracking down up-to-date information across city departments, nonprofits, and legal aid organizations — often with outdated or conflicting results.",
@@ -432,10 +428,9 @@ const personas = [
     ]
   },
   {
-    number: "04",
-    name: "Priya Nair",
-    role: "Working Parent",
-    image: "https://images.unsplash.com/photo-1573497019236-17f8177b81e8?w=600&q=80",
+    name: "Phylicia Porter",
+    role: "Councilwoman",
+    image: "https://canva.link/xwo6m4mjsp5eu6o0",
     quote: "I don't have time to go to an office. Everything has to work from my phone.",
     bio: "Priya works two jobs and is raising two kids as a single parent. She has run into housing instability before and is currently managing a dispute with her landlord about repairs. She's resourceful but time-poor, and needs help that meets her where she is.",
     demographics: [
@@ -452,17 +447,16 @@ const personas = [
     ]
   },
   {
-    number: "05",
-    name: "Calvin Soto",
-    role: "Returning Resident",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80",
-    quote: "Everyone tells me to 'just apply' — but nobody tells me what happens when they run my background.",
-    bio: "Calvin is rebuilding his life after incarceration and facing housing barriers that most applicants don't encounter. He's motivated and employed, but gets denied before he can even make his case. He needs fair-chance housing options and practical guidance.",
+    name: "Sophia Hosain",
+    role: "Zero Waste Manager",
+    image: "https://canva.link/hnqhaswtrb8yde8",
+    quote: "Waste management is consistently inconsistent", "When we are collective in our approach, things will have impact.", 
+    bio: "As the Zero Waste Manager, Sophia is focused on reducing Baltimore's overall waste generation and increasing diversion through infrastructure, policy, and behavior change. She believes that resident action combined with cross-agency collaboration and a shared ownership of Zero Waste activities will bring them monumentally closer to reaching LWBB's goals.",
     demographics: [
-      { label: "Age", value: "28–45" },
-      { label: "Status", value: "Recently reintegrated" },
-      { label: "Employment", value: "Part-time / new hire" },
-      { label: "Support", value: "Reentry program client" }
+      "Fair-chance housing listings and landlords",
+      "Know his rights around background check policies",
+      "Help writing a personal statement for applications",
+      "Connections to legal aid and reentry housing specialists"
     ],
     needs: [
       "Fair-chance housing listings and landlords",
@@ -472,20 +466,17 @@ const personas = [
     ]
   },
   {
-    number: "06",
-    name: "Evelyn Park",
-    role: "Senior Homeowner",
-    image: "https://images.unsplash.com/photo-1566616213894-2d4e1baee5d8?w=600&q=80",
-    quote: "This house is my retirement. I just need to know I won't lose it to something I don't understand.",
-    bio: "Evelyn owns her home but lives on a fixed income and is worried about tax bills, predatory refinancing schemes, and what happens to her home if she needs care. She's tech-cautious but capable, and wants to talk to a real person who won't judge her questions.",
+    name: "Kendall Abu-Hakim",
+    role: "Bureau Haed of Solid Waste",
+    image: "https://canva.link/i56scc701oju2dy",
+    quote: "We all have a sphere of influence. Once we buy into being ambassadors for Zero Waste, our messaging will grow exponentially. When we speak it, we live it. Practice what you preach.",
+    bio: "Overseeing all of the solid waste activities, Bureau Head Abu-Hakim finds that culture change within DPW is just as important as changing behavior in the community. He also understands that many Baltimore residents haven't had the chance to see what happens behind the scenes, and that without this context, it's hard to know why proper recycling and disposal matters. Zero Waste is a mountain to climb. But when residents, officials, and agencies work together, there's promise of a better future.",
     demographics: [
-      { label: "Age", value: "68–80" },
-      { label: "Income", value: "Fixed / retirement" },
-      { label: "Tenure", value: "Homeowner 20+ years" },
-      { label: "Tech comfort", value: "Low–moderate" }
+      "There's a missed opportunity to tell people the consequences of not recycling.",
+      " 
     ],
     needs: [
-      "Understand property tax relief programs she may qualify for",
+      "There's a missed opportunity to tell people the consequences of not recycling.",
       "Spot and avoid predatory lending or deed fraud",
       "In-person or phone-first support options",
       "Plain-language estate and homeownership planning help"
