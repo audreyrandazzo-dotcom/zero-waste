@@ -15,7 +15,7 @@
     --ink-faint: #9a9a94;
     --surface: #f5f3ee;
     --card-bg: #faf9f6;
-    --accent: #c0392b;
+    --accent: #2f7d32;
     --accent-warm: #e8ddd0;
     --border: rgba(26,26,24,0.12);
     --overlay: rgba(18,16,12,0.72);
@@ -30,17 +30,20 @@
   }
 
   .section-label {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
+    font-size: 15px;
+    font-weight: 300;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink-muted);
+    max-width: 540px;
+    line-height: 1.7;
     margin-bottom: 0.5rem;
   }
 
   h1 {
     font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-size: 1.2rem;
     font-weight: 700;
     line-height: 1.1;
     color: var(--ink);
@@ -78,12 +81,15 @@
     overflow: hidden;
   }
 
-  .card:hover {
+  .card:hover,
+  .card:focus-visible {
     transform: translateY(-4px);
     box-shadow: 0 12px 32px rgba(26,26,24,0.1);
+    outline: none;
   }
 
-  .card:hover .card-hint {
+  .card:hover .card-hint,
+  .card:focus-visible .card-hint {
     opacity: 1;
     transform: translateY(0);
   }
@@ -96,6 +102,18 @@
     position: relative;
   }
 
+  .image-fallback {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink-muted);
+    background: var(--accent-warm);
+  }
+
   .card-img-wrap img {
     width: 100%;
     height: 100%;
@@ -104,7 +122,8 @@
     transition: transform 0.4s ease;
   }
 
-  .card:hover .card-img-wrap img {
+  .card:hover .card-img-wrap img,
+  .card:focus-visible .card-img-wrap img {
     transform: scale(1.04);
   }
 
@@ -146,7 +165,8 @@
   .card-hint {
     position: absolute;
     bottom: 0;
-    left: 0; right: 0;
+    left: 0;
+    right: 0;
     background: var(--accent);
     color: #fff;
     font-size: 11px;
@@ -160,7 +180,6 @@
     transition: opacity 0.2s ease, transform 0.2s ease;
   }
 
-  /* MODAL */
   .modal-overlay {
     display: none;
     position: fixed;
@@ -172,9 +191,7 @@
     padding: 1.5rem;
   }
 
-  .modal-overlay.open {
-    display: flex;
-  }
+  .modal-overlay.open { display: flex; }
 
   .modal {
     background: var(--card-bg);
@@ -190,7 +207,7 @@
 
   @keyframes modalIn {
     from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .modal-img {
@@ -263,21 +280,30 @@
 
   .demo-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px 1rem;
+    grid-template-columns: 1fr;
+    gap: 6px;
   }
 
   .demo-item {
     font-size: 13px;
-    color: var(--ink);
-    font-weight: 400;
+    color: var(--ink-muted);
+    font-weight: 300;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
   }
 
-  .demo-item span {
-    color: var(--ink-faint);
-    font-size: 11px;
+  .demo-item::before,
+  .needs-list li::before {
+    content: '';
     display: block;
-    font-weight: 300;
+    width: 6px;
+    height: 6px;
+    min-width: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 6px;
   }
 
   .needs-list {
@@ -295,17 +321,6 @@
     align-items: flex-start;
     gap: 7px;
     line-height: 1.5;
-  }
-
-  .needs-list li::before {
-    content: '';
-    display: block;
-    width: 6px;
-    height: 6px;
-    min-width: 6px;
-    border-radius: 50%;
-    background: var(--accent);
-    margin-top: 6px;
   }
 
   .modal-close {
@@ -326,6 +341,7 @@
   .modal-close:hover { color: var(--ink); }
 
   @media (max-width: 560px) {
+    body { padding: 2rem 1rem; }
     .modal { grid-template-columns: 1fr; }
     .modal-img { min-height: 220px; max-height: 260px; }
     .modal-content { border-left: none; border-top: 3px solid var(--accent); }
@@ -338,7 +354,7 @@
 <p class="section-label">Baltimore's waste system is powered by people. From the resident rolling their bin to the curb, to the officials shaping policy, every role matters.</p>
 <div class="intro-rule"></div>
 <p class="intro-text">Recycling contamination is a shared challenge through every step of the process. There are possible methods of intervention, but they require an understanding of each key player in the recycling system.</p>
-<h1>Take a look into each level of perspective, which may include a struggle, desire, or idea.</em></h1>
+<h1>Take a look into each level of perspective, which may include a struggle, desire, or idea.</h1>
 
 <div class="grid" id="grid"></div>
 
@@ -347,6 +363,9 @@
     <button class="modal-close" id="close-btn" aria-label="Close">&times;</button>
     <img id="modal-img" class="modal-img" src="" alt="">
     <div class="modal-content">
+      <p class="modal-eyebrow" id="modal-eyebrow"></p>
+      <h2 class="modal-name" id="modal-name-el"></h2>
+      <p class="modal-role" id="modal-role"></p>
       <blockquote class="modal-quote" id="modal-quote"></blockquote>
       <div>
         <p class="modal-section-label">Background</p>
@@ -365,181 +384,207 @@
 </div>
 
 <script>
+/*
+  TO USE YOUR OWN PHOTOS:
+  1) Put your image files in the same folder as this HTML file.
+  2) Replace each image value with the file name, like: image: "rashaad.jpg"
+  3) For tidiness, you can also create an images folder and use: image: "images/rashaad.jpg"
+
+  Avoid Canva share links here. They often open a web preview page rather than a direct image file,
+  so the browser cannot display them inside an <img> tag.
+*/
 const personas = [
   {
     name: "Rashaad Tillery",
     role: "Baltimore Resident",
-    image: "https://canva.link/y0grjw725z6drdx",
+    image: "images/rashaad.jpg",
     quote: "I don't fully believe that my recycling actually gets recycled. I care about my neighborhood and my city's health, but it feels like no matter what I do, I can't make a difference.",
-    bio: "Baltimore residents are the first link in the chain. They make daily decisions in their households about what gets recycled, composted, or thrown away, often without enough information or support to get it right.",
-    demographics: [
-     //pain points
-       "Wants to know how the system works, and can't find recent or real information anywhere",
-       "Hierarchy of needs must be met first - like neighborhood safety",
-       "Bins have been stolen, and it's difficult to get a new one"
-       "It's unclear why DPW didn't take their recycling this week",
+    bio: "Baltimore residents are the first link in the chain. They make daily decisions in their households about what gets recycled, composted, or thrown away, often without enough information or support to get it right.",
+    painPoints: [
+      "Wants to know how the system works, and can't find recent or real information anywhere",
+      "Hierarchy of needs must be met first — like neighborhood safety",
+      "Bins have been stolen, and it's difficult to get a new one",
+      "It's unclear why DPW didn't take their recycling this week"
     ],
     needs: [
-     //needs and expectations
-      "Plain-language explanations of waste management system",
+      "Plain-language explanations of the waste management system",
       "For DPW to take their trash and recycling weekly",
-      "Empowerment that their recycling contribution does support the overall system",
-      "More ways to be sustainable, that are accessible to achieve"
+      "Empowerment that their recycling contribution supports the overall system",
+      "More sustainable options that are accessible and achievable"
     ]
   },
   {
     name: "Tyson",
     role: "Recycling Crew",
-    image: "https://canva.link/i56scc701oju2dy",
-    quote: "I've lived here 14 years. Nobody should be able to just push me out.",
-    bio: "As a recycling crew member, Tyson wakes up at 4am in order to get to work at 5am. He clocks in, and starts his route around 5:30am on a team of 3-4 workers. He checks each recycling bin on his route to ensure there are no contaminated items (i.e. anything with food or non-recyclable materials). He loads acceptable bins onto the dumping mechanism, and puts OOPS! tags on contaminated bins. He and his team move quickly and efficiently in order to get through their route on time.",
-    demographics: [
-     //pain points and frustrations
-      "Where there are contaminated items hidden underneath other recyclable ones, it slows down the process and potentially ruins the entire recycling load",
-      "Residents are stil learning about the recycling rules, and that education isn't consistent across neighborhoods",
-      "He sees contamination from the same households and same blocks every week",
-      "The tracking software doesn't always work, but it also slows down the route due to slow process to track"
+    image: "images/tyson.jpg",
+    quote: "Contaminated recycling slows everything down. We need residents to understand what can and cannot go in the bin.",
+    bio: "As a recycling crew member, Tyson wakes up at 4 a.m. to get to work by 5 a.m. He clocks in and starts his route around 5:30 a.m. on a team of 3–4 workers. He checks recycling bins for contaminated items, loads acceptable bins onto the dumping mechanism, and puts OOPS! tags on contaminated bins. His team moves quickly and efficiently to get through the route on time.",
+    painPoints: [
+      "Contaminated items hidden underneath recyclables slow down the process and can affect the whole recycling load",
+      "Residents are still learning the recycling rules, and education is not consistent across neighborhoods",
+      "He sees contamination from the same households and blocks every week",
+      "Tracking software does not always work and can slow the route"
     ],
     needs: [
-      //needs and expectations
-      "More education for residents so there's less contamination",
-      "Know who to contact when landlords are unresponsive",
-      "Access to community organizing resources",
-      "Assurance that her history here matters legally"
+      "More education for residents so there is less contamination",
+      "Clearer communication tools for recurring contamination issues",
+      "Reliable tracking software that does not slow down the route",
+      "Consistent resident-facing guidance about recycling rules"
     ]
   },
   {
     name: "Antwan Byrd",
     role: "Operations Manager",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-    quote: "The resources exist. The problem is nobody can find them — including me.",
-    bio: "Marcus works at a community nonprofit helping clients navigate housing instability. He spends hours each week tracking down up-to-date information across city departments, nonprofits, and legal aid organizations — often with outdated or conflicting results.",
-    demographics: [
-     //pain points and frustrations
-      "Policy changes or campaigns that increase pressure without added resources",
-      "City agencies don't fully grasp operational urgency or constraints",
-      "Folks who have power to change policy don't visit the landfill or understand the gravity of its circumstance"
+    quote: "The landfill's capacity is limited, but not everyone understands the operational reality behind that.",
+    bio: "As an operations manager, Antwan works close to the day-to-day realities of the waste system. He understands the urgency of landfill capacity, staffing, equipment, and site constraints, and wants policy and public messaging to reflect what is actually happening on the ground.",
+    painPoints: [
+      "Policy changes or campaigns can increase pressure without adding resources",
+      "City agencies do not always understand operational urgency or constraints",
+      "People with power to change policy do not always visit the landfill or understand the seriousness of the situation"
     ],
     needs: [
-      //needs and expectations
-      "Educate folks about the landfill's limited capacity and inspire a change in the system",
-      "Predictable budgets for equipment and site improvements"
+      "Education about the landfill's limited capacity",
+      "Messaging that inspires system-wide change",
+      "Predictable budgets for equipment and site improvements",
+      "Better connection between policy decisions and operational realities"
     ]
   },
   {
     name: "Phylicia Porter",
     role: "Councilwoman",
-    image: "https://canva.link/xwo6m4mjsp5eu6o",
-    quote: "I don't have time to go to an office. Everything has to work from my phone.",
-    bio: "Priya works two jobs and is raising two kids as a single parent. She has run into housing instability before and is currently managing a dispute with her landlord about repairs. She's resourceful but time-poor, and needs help that meets her where she is.",
-    demographics: [
-      //pain points and frustrations
-      "Mobile-first resources she can access during breaks",
-      "Fast answers to specific, urgent questions",
-      "Help documenting repair requests and landlord contact",
-      "Childcare-friendly appointment or virtual options"
+    image: "images/phylicia.jpg",
+    quote: "Residents need clear information and visible action. Policy only works when people understand what is changing and why.",
+    bio: "As a councilwoman, Phylicia Porter hears resident concerns and helps shape policy. She needs information that is clear, accurate, and easy to communicate to the public, especially when decisions affect neighborhood services and resident behavior.",
+    painPoints: [
+      "Residents often receive unclear or inconsistent information",
+      "Policy conversations can feel disconnected from residents' daily experiences",
+      "It can be hard to explain system constraints in a way that feels actionable",
+      "Community trust is difficult to build when service issues persist"
     ],
     needs: [
-      //needs and expectations
-      "Mobile-first resources she can access during breaks",
-      "Fast answers to specific, urgent questions",
-      "Help documenting repair requests and landlord contact",
-      "Childcare-friendly appointment or virtual options"
+      "Plain-language talking points for residents",
+      "Clear evidence about what is working and what is not",
+      "Visible examples of progress",
+      "Messaging that connects resident action to system-level impact"
     ]
   },
   {
     name: "Sophia Hosain",
     role: "Zero Waste Manager",
-    image: "https://canva.link/hnqhaswtrb8yde8",
-    quote: "Waste management is consistently inconsistent", "When we are collective in our approach, things will have impact.", 
-    bio: "As the Zero Waste Manager, Sophia is focused on reducing Baltimore's overall waste generation and increasing diversion through infrastructure, policy, and behavior change. She believes that resident action combined with cross-agency collaboration and a shared ownership of Zero Waste activities will bring them monumentally closer to reaching LWBB's goals.",
-    demographics: [
-      "Fair-chance housing listings and landlords",
-      "Know his rights around background check policies",
-      "Help writing a personal statement for applications",
-      "Connections to legal aid and reentry housing specialists"
+    image: "images/sophia.jpg",
+    quote: "Waste management is consistently inconsistent. When we are collective in our approach, things will have impact.",
+    bio: "As the Zero Waste Manager, Sophia is focused on reducing Baltimore's overall waste generation and increasing diversion through infrastructure, policy, and behavior change. She believes that resident action, cross-agency collaboration, and shared ownership of Zero Waste activities can move the city closer to the goals of Less Waste, Better Baltimore.",
+    painPoints: [
+      "Zero Waste work depends on coordination across agencies and stakeholders",
+      "Resident behavior change is difficult without consistent education and infrastructure",
+      "People may question whether individual participation matters",
+      "Messaging can become fragmented when many groups are involved"
     ],
     needs: [
-      "Fair-chance housing listings and landlords",
-      "Know his rights around background check policies",
-      "Help writing a personal statement for applications",
-      "Connections to legal aid and reentry housing specialists"
+      "Cross-agency alignment around Zero Waste goals",
+      "Clear resident education about recycling, composting, and waste reduction",
+      "Shared ownership across city agencies and community partners",
+      "Messaging that shows individual action as part of a larger system"
     ]
   },
   {
     name: "Kendall Abu-Hakim",
-    role: "Bureau Haed of Solid Waste",
-    image: "https://canva.link/i56scc701oju2dy",
+    role: "Bureau Head of Solid Waste",
+    image: "images/tyson.jpg",
     quote: "We all have a sphere of influence. Once we buy into being ambassadors for Zero Waste, our messaging will grow exponentially. When we speak it, we live it. Practice what you preach.",
-    bio: "Overseeing all of the solid waste activities, Bureau Head Abu-Hakim finds that culture change within DPW is just as important as changing behavior in the community. He also understands that many Baltimore residents haven't had the chance to see what happens behind the scenes, and that without this context, it's hard to know why proper recycling and disposal matters. Zero Waste is a mountain to climb. But when residents, officials, and agencies work together, there's promise of a better future.",
-    demographics: [
-      "There's a missed opportunity to tell people the consequences of not recycling.",
-      " 
+    bio: "Overseeing solid waste activities, Bureau Head Abu-Hakim finds that culture change within DPW is just as important as changing behavior in the community. He understands that many Baltimore residents have not had the chance to see what happens behind the scenes, and without that context, it is hard to know why proper recycling and disposal matters. Zero Waste is a mountain to climb, but when residents, officials, and agencies work together, there is promise of a better future.",
+    painPoints: [
+      "There is a missed opportunity to tell people the consequences of not recycling",
+      "Residents do not always see what happens behind the scenes",
+      "Internal culture change is needed alongside public behavior change",
+      "Zero Waste requires consistent ambassadors across the system"
     ],
     needs: [
-      "There's a missed opportunity to tell people the consequences of not recycling.",
-      "",
-      "",
-      ""
+      "More storytelling about the consequences of waste and contamination",
+      "Internal buy-in from DPW staff and city partners",
+      "Resident education that connects behavior to real system impacts",
+      "A shared ambassador mindset around Zero Waste"
     ]
   }
 ];
 
 const grid = document.getElementById('grid');
 const overlay = document.getElementById('overlay');
+const closeBtn = document.getElementById('close-btn');
 
-personas.forEach((p, i) => {
+personas.forEach((persona, index) => {
+  persona.number = String(index + 1).padStart(2, '0');
+
   const card = document.createElement('div');
   card.className = 'card';
   card.setAttribute('tabindex', '0');
   card.setAttribute('role', 'button');
-  card.setAttribute('aria-label', `Learn more about ${p.name}`);
+  card.setAttribute('aria-label', `Learn more about ${persona.name}`);
+
   card.innerHTML = `
     <div class="card-img-wrap">
-      <img src="${p.image}" alt="${p.name}" loading="lazy">
-      <div class="card-number">${p.number}</div>
+      <img src="${persona.image}" alt="${persona.name}" loading="lazy">
+      <div class="card-number">${persona.number}</div>
     </div>
     <div class="card-body">
-      <div class="card-name">${p.name}</div>
-      <div class="card-role">${p.role}</div>
+      <div class="card-name">${persona.name}</div>
+      <div class="card-role">${persona.role}</div>
     </div>
     <div class="card-hint">View profile</div>
   `;
-  card.addEventListener('click', () => openModal(p));
-  card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openModal(p); });
+
+  card.addEventListener('click', () => openModal(persona));
+  card.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openModal(persona);
+    }
+  });
+
   grid.appendChild(card);
 });
 
-function openModal(p) {
-  document.getElementById('modal-img').src = p.image;
-  document.getElementById('modal-img').alt = p.name;
-  document.getElementById('modal-eyebrow').textContent = `Persona ${p.number}`;
-  document.getElementById('modal-name-el').textContent = p.name;
-  document.getElementById('modal-role').textContent = p.role;
-  document.getElementById('modal-quote').textContent = `"${p.quote}"`;
-  document.getElementById('modal-bio').textContent = p.bio;
+function openModal(persona) {
+  document.getElementById('modal-img').src = persona.image;
+  document.getElementById('modal-img').alt = persona.name;
+  document.getElementById('modal-eyebrow').textContent = `Persona ${persona.number}`;
+  document.getElementById('modal-name-el').textContent = persona.name;
+  document.getElementById('modal-role').textContent = persona.role;
+  document.getElementById('modal-quote').textContent = `“${persona.quote}”`;
+  document.getElementById('modal-bio').textContent = persona.bio;
 
   const demoGrid = document.getElementById('modal-demo');
-  demoGrid.innerHTML = p.demographics.map(d =>
-    `<div class="demo-item"><span>${d.label}</span>${d.value}</div>`
-  ).join('');
+  demoGrid.innerHTML = persona.painPoints
+    .filter(Boolean)
+    .map(point => `<div class="demo-item">${point}</div>`)
+    .join('');
 
   const needsList = document.getElementById('modal-needs');
-  needsList.innerHTML = p.needs.map(n => `<li>${n}</li>`).join('');
+  needsList.innerHTML = persona.needs
+    .filter(Boolean)
+    .map(need => `<li>${need}</li>`)
+    .join('');
 
   overlay.classList.add('open');
-  document.getElementById('close-btn').focus();
+  closeBtn.focus();
   document.body.style.overflow = 'hidden';
 }
-
-document.getElementById('close-btn').addEventListener('click', closeModal);
-overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 function closeModal() {
   overlay.classList.remove('open');
   document.body.style.overflow = '';
 }
+
+closeBtn.addEventListener('click', closeModal);
+
+overlay.addEventListener('click', event => {
+  if (event.target === overlay) closeModal();
+});
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+});
 </script>
 </body>
 </html>
